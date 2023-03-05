@@ -21,11 +21,12 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 import java.lang.reflect.Field;
 
-public class Main {
+public class Main<myEmployeeList> {
 
     public static void main(String[] args) throws ParserConfigurationException, IOException, SAXException {
 
@@ -33,8 +34,8 @@ public class Main {
 //        String fileName = "data.csv";
 //        List<Employee> list = parceCSV(columnMapping, fileName);
 //        listToJSON(list);
-        List<Employee> list = parceXML( "data.xml");
-
+        List<Employee> list = parceXML("data.xml");
+        listToJSON(list);
 
     }
 
@@ -60,7 +61,8 @@ public class Main {
 
     public static void listToJSON(List<Employee> list) {
 
-        Type listType = new TypeToken<List<Employee>>() {}.getType();
+        Type listType = new TypeToken<List<Employee>>() {
+        }.getType();
         GsonBuilder myJsonBuilder = new GsonBuilder();
         Gson myGson = myJsonBuilder.create();
         String json = myGson.toJson(list, listType);
@@ -78,52 +80,35 @@ public class Main {
     }
 
     public static List<Employee> parceXML(String fileName) throws ParserConfigurationException, IOException, SAXException {
-        List<Employee> myEmployeeList = null;
+        List<Employee> myEmployeeList = new ArrayList<>();
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
-        Document doc = builder.parse( new File(fileName));
+        Document doc = builder.parse(new File(fileName));
         Node root = doc.getDocumentElement();
         NodeList myNodeList = root.getChildNodes();
         for (int i = 0; i < myNodeList.getLength(); i++) {
             Node currentNode = myNodeList.item(i);
             if (Node.ELEMENT_NODE == currentNode.getNodeType()) {
-                Element employeeXML  = (Element) currentNode;
-                if (employeeXML.getNodeName() == "employee") {
-                    NodeList employeeFields = employeeXML.getChildNodes();
-
-//                    Class<Employee> myEmployeeClass = (Class<Employee>) employee.getClass();
-//                    Field[] fields = myEmployeeClass.getDeclaredFields();
-//                    fields.
-
-                    long currentID = 0;
-                    String currentFirstName = "";
-                    String currentLastName = "";
-                    String currentCountry = "";
-                    int currentAge = 0;
-                    for (int j = 0; j < employeeFields.getLength(); j++) {
-                        Node currentField = employeeFields.item(j);
-                        String fieldName = currentField.getNodeName();
-                        switch (fieldName) {
-                            case "id":
-                                currentID = Long.parseLong(currentField.getNodeValue());
-                            case "firstName":
-                                currentFirstName = currentField.getNodeValue();
-                            case "lastName":
-                                currentLastName = currentField.getNodeValue();
-                            case "country":
-                                currentCountry = currentField.getNodeValue();
-                            case "age":
-                                currentAge = Integer.parseInt(currentField.getNodeValue());
-                        }
-                    }
-                    Employee employee = new Employee(currentID, currentFirstName, currentLastName, currentCountry, currentAge);
-                    myEmployeeList.add(employee);
+                Element employeeXML = (Element) currentNode;
+                NodeList nlId = employeeXML.getElementsByTagName("id");
+                for (int j = 0; j < nlId.getLength(); j++) {
+                    Employee myEmployee = new Employee(Long.parseLong(nlId.item(j).getTextContent()),
+                            employeeXML.getElementsByTagName("firstName").item(j).getTextContent(),
+                            employeeXML.getElementsByTagName("lastName").item(j).getTextContent(),
+                            employeeXML.getElementsByTagName("country").item(j).getTextContent(),
+                            Integer.parseInt(employeeXML.getElementsByTagName("age").item(j).getTextContent()));
+                    myEmployeeList.add(myEmployee);
+//                    myEmployeeList.add(new Employee(Long.parseLong(nlId.item(j).getTextContent()),
+//                            employeeXML.getElementsByTagName("firstName").item(j).getTextContent(),
+//                            employeeXML.getElementsByTagName("lastName").item(j).getTextContent(),
+//                            employeeXML.getElementsByTagName("country").item(j).getTextContent(),
+//                            Integer.parseInt(employeeXML.getElementsByTagName("age").item(j).getTextContent())));
                 }
+
             }
         }
-
-
         return myEmployeeList;
     }
 
 }
+

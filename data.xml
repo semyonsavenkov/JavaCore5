@@ -1,16 +1,16 @@
 <staff>
     <employee>
         <id>1</id>
-        <firstName>John</firstName>
+        <firstName>Sam</firstName>
         <lastName>Smith</lastName>
         <country>USA</country>
-        <age>25</age>
+        <age>28</age>
     </employee>
     <employee>
         <id>2</id>
-        <firstName>Inav</firstName>
-        <lastName>Petrov</lastName>
+        <firstName>Ivan</firstName>
+        <lastName>Alekseev</lastName>
         <country>RU</country>
-        <age>23</age>
+        <age>37</age>
     </employee>
 </staff>

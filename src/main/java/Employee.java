@@ -6,7 +6,7 @@ public class Employee {
     public String country;
     public int age;
 
-    public Employee() {
+    public Employee(long l, String firstName, String lastName) {
         // Пустой конструктор
     }
 
