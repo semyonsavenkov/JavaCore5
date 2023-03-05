@@ -98,17 +98,10 @@ public class Main<myEmployeeList> {
                             employeeXML.getElementsByTagName("country").item(j).getTextContent(),
                             Integer.parseInt(employeeXML.getElementsByTagName("age").item(j).getTextContent()));
                     myEmployeeList.add(myEmployee);
-//                    myEmployeeList.add(new Employee(Long.parseLong(nlId.item(j).getTextContent()),
-//                            employeeXML.getElementsByTagName("firstName").item(j).getTextContent(),
-//                            employeeXML.getElementsByTagName("lastName").item(j).getTextContent(),
-//                            employeeXML.getElementsByTagName("country").item(j).getTextContent(),
-//                            Integer.parseInt(employeeXML.getElementsByTagName("age").item(j).getTextContent())));
                 }
-
             }
         }
         return myEmployeeList;
     }
-
 }
 
